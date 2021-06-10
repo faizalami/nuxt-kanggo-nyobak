@@ -7,14 +7,15 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
-    "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
-    "lint": "yarn lint:js && yarn lint:style",
+    "lint": "eslint --ext .js,.vue --ignore-path .eslintignore .",
+    "lint:fix": "eslint --fix --ext .js,.vue --ignore-path .eslintignore .",
+    "lint-style": "stylelint **/*.{vue,htm,html,css,sss,less,scss,sass}",
+    "lint-style:fix": "stylelint --fix **/*.{vue,htm,html,css,sss,less,scss,sass}",
     "test": "jest"
   },
   "lint-staged": {
-    "*.{js,vue}": "eslint",
-    "*.{css,vue}": "stylelint"
+    "*.{js,vue}": "yarn lint:fix",
+    "*.{vue,htm,html,css,sss,less,scss,sass}": "yarn lint-style:fix"
   },
   "husky": {
     "hooks": {
@@ -22,12 +23,19 @@
     }
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.13.1",
+    "@nuxtjs/axios": "^5.13.4",
     "@nuxtjs/pwa": "^3.3.5",
     "core-js": "^3.9.1",
-    "nuxt": "^2.15.3"
+    "eslint-config-airbnb-base": "^14.2.1",
+    "js-cookie": "^2.2.1",
+    "nuxt": "^2.15.3",
+    "stylelint-config-recommended": "^5.0.0",
+    "stylelint-processor-html": "^1.0.0",
+    "stylelint-scss": "^3.19.0",
+    "vue-tailwind": "^2.2.1"
   },
   "devDependencies": {
+    "@nuxt/types": "~2.15.0",
     "@nuxtjs/eslint-config": "^6.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/stylelint-module": "^4.0.0",
