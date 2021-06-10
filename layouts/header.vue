@@ -1,6 +1,6 @@
 <template>
   <header class="flex justify-end items-center py-4 px-6 mb-8 bg-blue-500 shadow-xl min-h-10">
-    <div v-if="login" class="flex items-center">
+    <div v-if="!!profile" class="flex items-center">
       <t-dropdown>
         <template #trigger="{
           mousedownHandler,
@@ -15,7 +15,7 @@
             @keydown="keydownHandler"
             @mousedown="mousedownHandler"
           >
-            <span class="inline text-sm mr-2">Username</span>
+            <span class="inline text-sm mr-2">{{ profile ? profile.username : 'Unavailable.' }}</span>
             <img
               alt="Avatar"
               class="inline h-8 w-8 rounded-full object-cover bg-gray-200"
@@ -31,7 +31,7 @@
             Profile
           </t-button>
           <hr />
-          <t-button class="w-full rounded-t-none" variant="link">
+          <t-button class="w-full rounded-t-none" variant="link" @click="logout">
             Logout
           </t-button>
         </div>
@@ -72,7 +72,7 @@
             placeholder="Password"
             type="password"
           />
-          <t-button class="w-full mt-2">
+          <t-button class="w-full mt-2" @click="loginProcess">
             Login
           </t-button>
         </div>
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 /**
  * **Header Layout**
  *
@@ -91,12 +92,32 @@ export default {
   name: 'Header',
   data () {
     return {
-      login: false,
       form: {
         email: null,
         password: null,
       },
     };
+  },
+  computed: {
+    ...mapGetters({
+      token: 'token',
+      profile: 'user/profile',
+    }),
+  },
+  async mounted () {
+    if (!this.profile && this.token) {
+      await this.getProfile();
+    }
+  },
+  methods: {
+    ...mapActions({
+      login: 'login',
+      logout: 'logout',
+      getProfile: 'user/getProfile',
+    }),
+    async loginProcess () {
+      await this.login(this.form);
+    },
   },
 };
 </script>

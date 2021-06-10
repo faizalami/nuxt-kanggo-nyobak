@@ -14,7 +14,7 @@ export default function ({ $axios, store }) {
   $axios.onRequest(config => {
     if (Cookie.get('token')) {
       config.headers = {
-        Authentication: `Bearer ${Cookie.get('token')}`,
+        Authorization: `Bearer ${Cookie.get('token')}`,
       };
     }
   });
