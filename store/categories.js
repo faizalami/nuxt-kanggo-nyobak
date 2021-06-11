@@ -46,6 +46,36 @@ export const actions = {
       }
     }
   },
+  /**
+   * Create new item.
+   *
+   * @param context
+   * @param {String} name - Category name.
+   * @param {String} description - Description.
+   * @returns {Promise<{success: boolean, error}|{data: any, success: boolean}|{success: boolean}>}
+   */
+  async create (context, { name, description }) {
+    try {
+      const { status, data } = await this.$axios.post('/categories', {
+        name,
+        description,
+      });
+      return {
+        success: status === 200,
+        data,
+      };
+    } catch (error) {
+      if (!this.$axios.isCancel(error)) {
+        return {
+          success: false,
+          error,
+        };
+      }
+      return {
+        success: true,
+      };
+    }
+  },
 };
 
 export const state = () => ({ ...stateData });

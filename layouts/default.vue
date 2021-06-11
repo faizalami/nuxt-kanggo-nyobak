@@ -8,6 +8,7 @@
 
         <main id="content-wrapper" class="min-h-full h-auto">
           <div class="mx-5 md:mx-20">
+            <h1 class="text-xl font-bold mb-4">{{ page_title }}</h1>
             <nuxt />
           </div>
         </main>
@@ -25,6 +26,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Header from '~/layouts/header';
 import Sidebar from '~/layouts/sidebar';
 
@@ -38,6 +40,11 @@ export default {
   components: {
     'header-layout': Header,
     'sidebar-layout': Sidebar,
+  },
+  computed: {
+    ...mapGetters({
+      page_title: 'page_title',
+    }),
   },
 };
 </script>

@@ -8,18 +8,25 @@ const cookieParser = process.server ? require('cookieparser') : undefined;
  * @author Faizal Amiruddin <f.a.faizal.amiruddin@gmail.com>
  */
 const stateData = {
-  token: null,
+  logged_in: false,
+  page_title: null,
 };
 
 export const mutations = {
-  token (state, payload) {
-    state.token = payload;
+  logged_in (state, payload) {
+    state.logged_in = payload;
+  },
+  page_title (state, payload) {
+    state.page_title = payload;
   },
 };
 
 export const getters = {
-  token (state) {
-    return state.token;
+  logged_in (state) {
+    return state.logged_in;
+  },
+  page_title (state) {
+    return state.page_title;
   },
 };
 
@@ -32,18 +39,16 @@ export const actions = {
    * @param req
    */
   nuxtServerInit ({ commit, dispatch }, { req }) {
-    let token = null;
-    if (req.headers.cookie) {
-      const parsed = cookieParser.parse(req.headers.cookie);
-      try {
-        token = parsed.token;
-      } catch (err) {
-        dispatch('logout');
+    try {
+      if (req.headers.cookie) {
+        const parsed = cookieParser.parse(req.headers.cookie);
+        if (parsed.token) {
+          commit('logged_in', true);
+        } else {
+          dispatch('logout');
+        }
       }
-    }
-    if (token) {
-      commit('token', token);
-    } else {
+    } catch (error) {
       dispatch('logout');
     }
   },
@@ -61,7 +66,7 @@ export const actions = {
         password,
       });
 
-      commit('token', response.jwt);
+      commit('logged_in', true);
       Cookie.set('token', response.jwt);
       commit('user/profile', response.user);
       return {
@@ -88,7 +93,7 @@ export const actions = {
     try {
       if (process.client) {
         Cookie.remove('token');
-        commit('token', null);
+        commit('logged_in', false);
       }
       commit('user/profile', null);
       return {
@@ -99,6 +104,15 @@ export const actions = {
         success: false,
       };
     }
+  },
+  /**
+   * Set page header title.
+   *
+   * @param commit
+   * @param {String} title - Page title.
+   */
+  setPageTitle ({ commit }, title) {
+    commit('page_title', title);
   },
 };
 

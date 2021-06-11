@@ -1,6 +1,6 @@
 <template>
   <header class="flex justify-end items-center py-4 px-6 mb-8 bg-blue-500 shadow-xl min-h-10">
-    <div v-if="!!profile" class="flex items-center">
+    <div v-if="logged_in" class="flex items-center">
       <t-dropdown>
         <template #trigger="{
           mousedownHandler,
@@ -100,12 +100,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      token: 'token',
+      logged_in: 'logged_in',
       profile: 'user/profile',
     }),
   },
   async mounted () {
-    if (!this.profile && this.token) {
+    if (!this.profile && this.logged_in) {
       await this.getProfile();
     }
   },
