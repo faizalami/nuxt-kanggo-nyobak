@@ -79,9 +79,11 @@ export default {
       });
     },
     loadData () {
-      Object.keys(this.form).forEach(key => {
-        this.form[key] = this.selectedData[key];
-      });
+      if (this.mode === 'edit') {
+        Object.keys(this.form).forEach(key => {
+          this.form[key] = this.selectedData[key];
+        });
+      }
     },
     async submit () {
       if (['create', 'edit'].includes(this.mode)) {

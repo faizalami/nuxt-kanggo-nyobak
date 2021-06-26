@@ -1,14 +1,16 @@
 <template>
   <div>
-    <div class="mb-4">
-      <t-button v-if="logged_in" class="ml-auto" @click="openFormModal('create')">Add Product</t-button>
-    </div>
     <t-card>
       <div class="flex mb-2">
-        <div class="flex-auto ml-auto">
+        <div class="flex-auto">
+          <t-button v-if="logged_in" @click="openFormModal('create')">
+            Add Product
+          </t-button>
+        </div>
+        <div class="flex-auto">
           <t-input
             v-model="search"
-            classes="float-right w-full sm:w-auto"
+            classes="ml-auto w-full sm:w-auto"
             placeholder="Search"
           />
         </div>
@@ -16,8 +18,9 @@
       <data-table
         :data="data"
         :headers="headers"
-        :page="1"
-        :total-items="data.length"
+        :page="page"
+        :total-items="total"
+        @page-changed="setPage"
       >
         <template #column(actions)="{ row }">
           <t-button
@@ -89,6 +92,8 @@ export default {
     ...mapGetters({
       logged_in: 'logged_in',
       data: 'categories/data',
+      page: 'categories/page',
+      total: 'categories/total',
     }),
   },
   created () {
@@ -102,6 +107,7 @@ export default {
       setPageTitle: 'setPageTitle',
       getAll: 'categories/getAll',
       setSearch: 'categories/setSearch',
+      setPage: 'categories/setPage',
       deleteItem: 'categories/delete',
     }),
     openFormModal (mode, data) {

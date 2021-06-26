@@ -10,6 +10,8 @@ const stateData = {
   detail: null,
   params: null,
   search: null,
+  page: 1,
+  total: 0,
 };
 
 export const mutations = {
@@ -25,6 +27,12 @@ export const mutations = {
   search (state, payload) {
     state.search = payload;
   },
+  page (state, payload) {
+    state.page = payload;
+  },
+  total (state, payload) {
+    state.total = payload;
+  },
 };
 
 export const getters = {
@@ -33,6 +41,12 @@ export const getters = {
   },
   detail (state) {
     return state.detail;
+  },
+  page (state) {
+    return state.page;
+  },
+  total (state) {
+    return state.total;
   },
 };
 
@@ -48,6 +62,24 @@ export const actions = {
     commit('search', payload);
     await dispatch('getAll');
   },
+  /**
+   * Set page param.
+   *
+   * @param commit
+   * @param dispatch
+   * @param payload
+   * @returns {Promise<void>}
+   */
+  async setPage ({ commit, dispatch }, payload) {
+    commit('page', payload);
+    await dispatch('getAll');
+  },
+  /**
+   * Build API URL parameters.
+   *
+   * @param state
+   * @param commit
+   */
   buildParams ({ state, commit }) {
     let params = { ...state.params };
     if (state.search && state.search !== '') {
@@ -61,6 +93,11 @@ export const actions = {
         },
       };
     }
+    params = {
+      ...params,
+      _limit: 10,
+      _start: (state.page - 1) * 10,
+    };
     commit('params', params);
   },
   /**
@@ -74,10 +111,27 @@ export const actions = {
   async getAll ({ state, commit, dispatch }) {
     try {
       dispatch('buildParams');
-      console.info(state.params);
       const response = await this.$axios.$get(`/categories?${qs.stringify(state.params)}`);
 
       commit('data', response);
+      await dispatch('getTotal');
+    } catch (error) {
+      if (!this.$axios.isCancel(error)) {
+        throw error.response ? error.response : error;
+      }
+    }
+  },
+  /**
+   * Get total all data.
+   *
+   * @param commit
+   * @returns {Promise<void>}
+   */
+  async getTotal ({ commit }) {
+    try {
+      const total = await this.$axios.$get('/categories/count');
+
+      commit('total', total);
     } catch (error) {
       if (!this.$axios.isCancel(error)) {
         throw error.response ? error.response : error;
