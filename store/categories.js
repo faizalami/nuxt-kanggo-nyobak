@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 /**
  * **Products Store**
  *
@@ -6,6 +8,8 @@
 const stateData = {
   data: [],
   detail: null,
+  params: null,
+  search: null,
 };
 
 export const mutations = {
@@ -14,6 +18,12 @@ export const mutations = {
   },
   detail (state, payload) {
     state.detail = payload;
+  },
+  params (state, payload) {
+    state.params = payload;
+  },
+  search (state, payload) {
+    state.search = payload;
   },
 };
 
@@ -28,6 +38,32 @@ export const getters = {
 
 export const actions = {
   /**
+   * Set search param.
+   *
+   * @param commit
+   * @param dispatch
+   * @param {String|Number} payload - Search payload.
+   */
+  async setSearch ({ commit, dispatch }, payload) {
+    commit('search', payload);
+    await dispatch('getAll');
+  },
+  buildParams ({ state, commit }) {
+    let params = { ...state.params };
+    if (state.search && state.search !== '') {
+      params = {
+        ...params,
+        _where: {
+          _or: [
+            { name_contains: state.search },
+            { description_contains: state.search },
+          ],
+        },
+      };
+    }
+    commit('params', params);
+  },
+  /**
    * Get all data with pagination, filter, and sorting.
    *
    * @param state
@@ -37,7 +73,9 @@ export const actions = {
    */
   async getAll ({ state, commit, dispatch }) {
     try {
-      const response = await this.$axios.$get('/categories');
+      dispatch('buildParams');
+      console.info(state.params);
+      const response = await this.$axios.$get(`/categories?${qs.stringify(state.params)}`);
 
       commit('data', response);
     } catch (error) {

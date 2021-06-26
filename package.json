@@ -30,6 +30,7 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "js-cookie": "^2.2.1",
     "nuxt": "^2.15.3",
+    "qs": "^6.10.1",
     "stylelint-config-recommended": "^5.0.0",
     "stylelint-processor-html": "^1.0.0",
     "stylelint-scss": "^3.19.0",

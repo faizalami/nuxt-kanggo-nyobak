@@ -43,7 +43,7 @@
         </template>
       </t-table>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2">
+    <div class="grid grid-cols-1 sm:grid-cols-2 mt-2">
       <div class="flex items-center">
         Showing {{ limit_start }} to {{ limit_end }}
         of {{ totalItems }} items.
