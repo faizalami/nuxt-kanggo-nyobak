@@ -41,9 +41,7 @@ export const actions = {
 
       commit('data', response);
     } catch (error) {
-      if (!this.$axios.isCancel(error)) {
-        throw error.response ? error.response : error;
-      }
+      throw error.response ? error.response : error;
     }
   },
 };

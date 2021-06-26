@@ -82,12 +82,15 @@ const settings = {
       fixedClasses: 'block transition duration-100 ease-in-out focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed',
       classes: 'text-white bg-blue-500 px-4 py-2 border border-transparent shadow-sm rounded hover:bg-blue-600',
       variants: {
-        secondary: 'text-gray-800 bg-white px-4 py-2 border border-gray-300 shadow-sm hover:text-gray-600',
+        secondary: 'text-gray-500 bg-white px-4 py-2 border border-gray-300 shadow-sm',
         error: 'text-white bg-red-500 px-4 py-2 border border-transparent rounded shadow-sm hover:bg-red-600',
         success: 'text-white bg-green-500 px-4 py-2 border border-transparent rounded shadow-sm hover:bg-green-600',
         link: 'text-blue-500 px-4 py-2 hover:text-blue-600',
         sidebar: 'text-white bg-transparent px-4 py-2 border border-transparent rounded hover:text-blue-500 hover:bg-blue-50 w-11/12 mx-auto my-2',
         navbar: 'text-white bg-transparent px-4 py-0 border border-transparent rounded hover:text-blue-500 hover:bg-blue-50 h-10 relative',
+        'primary-small': 'text-white bg-blue-500 p-1 border border-transparent shadow-sm rounded hover:bg-blue-600',
+        'error-small': 'text-white bg-red-500 p-1 border border-transparent rounded shadow-sm hover:bg-red-600',
+        'secondary-small': 'text-gray-500 bg-white p-1 border border-gray-300 rounded shadow-sm',
       },
     },
   },
@@ -541,7 +544,7 @@ const settings = {
     component: TPagination,
     props: {
       classes: {
-        wrapper: 'table border-collapse text-center bg-white mx-auto shadow-sm',
+        wrapper: 'table border-collapse text-center bg-white ml-auto shadow-sm',
         element: 'w-8 h-8 border border-gray-200 table-cell hover:border-blue-100',
         activeElement: 'w-8 h-8 border border-gray-200 border-blue-500 table-cell hover:border-blue-600',
         disabledElement: 'w-8 h-8 border border-gray-200 table-cell',

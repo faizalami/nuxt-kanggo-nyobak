@@ -26,7 +26,7 @@ import { mapActions, mapGetters } from 'vuex';
 /**
  * **Products page**
  *
- * @author Faizal Amiruddin
+ * @author Faizal Amiruddin <f.a.faizal.amiruddin@gmail.com>
  */
 export default {
   name: 'Products',
