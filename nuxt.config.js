@@ -33,6 +33,7 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: [
     '~/components/global',
+    { path: '~/components/global/icons', prefix: '' },
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules

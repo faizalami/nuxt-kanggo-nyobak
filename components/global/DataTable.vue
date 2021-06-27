@@ -8,6 +8,37 @@
         :headers="headers"
         variant="thin"
       >
+        <template #thead="props">
+          <thead :class="props.theadClass">
+            <tr :class="props.trClass">
+              <th
+                v-for="(item, index) in props.data"
+                :key="index"
+                :class="{
+                  [props.thClass]: true,
+                  'w-1': item.narrow,
+                }"
+              >
+                <t-button
+                  :class="item.sortable === false ? 'cursor-default' : ''"
+                  :disabled="item.sortable === false"
+                  variant="table-header"
+                  @click="setSort(item.value, item)"
+                >
+                  <div class="flex items-center justify-center">
+                    <div class="flex-1 text-left">{{ item.text }}</div>
+                    <div v-if="item.sortable !== false" class="flex-1">
+                      <sort-icon v-if="!item.sort" class="ml-auto" />
+                      <sort-asc-icon v-else-if="item.sort === 'asc'" class="ml-auto" />
+                      <sort-desc-icon v-else-if="item.sort === 'desc'" class="ml-auto" />
+                    </div>
+                  </div>
+                </t-button>
+              </th>
+            </tr>
+          </thead>
+        </template>
+
         <template #row="props">
           <tr :class="props.trClass">
             <td
@@ -126,10 +157,10 @@ export default {
      * Set sorting direction (asc or desc) and
      * insert the data key to order_priority.
      *
-     * @param {String} value - The data key in table header.
+     * @param {String} key - The data key in table header.
      * @param {Object} header - The header object of selected column.
      */
-    setSort (value, header) {
+    setSort (key, header) {
       const headers = [...this.headers];
       const sortType = [null, 'asc', 'desc'];
       if (header.sortable !== false) {
@@ -138,51 +169,23 @@ export default {
           ...header,
           sort: sortOrder < 2 ? sortType[sortOrder + 1] : sortType[0],
         };
-        const index = this.headers.findIndex(item => item.value === value);
-        headers.splice(index, 1, sortField);
+        const index = this.headers.findIndex(item => item.value === key);
+        if (index >= 0) {
+          headers.splice(index, 1, sortField);
 
-        /**
-         * Emit to synchronize table header.
-         *
-         * @param {Array} headers - New table header.
-         */
-        this.$emit('update:headers', headers);
-
-        if (!this.order_priority.includes(value)) {
-          this.order_priority.push(value);
-        } else if (sortField.sort === null) {
-          const priorityIndex = this.order_priority.indexOf(value);
-          if (index > -1) {
-            this.order_priority.splice(priorityIndex, 1);
-          }
+          /**
+           * Emit to synchronize table header.
+           *
+           * @param {Array} headers - New table header.
+           */
+          this.$emit('update:headers', headers);
+          /**
+           * Emit to execute sort function.
+           *
+           * @param {Array} headers - New table header.
+           */
+          this.$emit('sort', headers);
         }
-      }
-
-      /**
-       * Emit to get new table header and order priority.
-       *
-       * @param {Array} event.tableHeader - New table header.
-       * @param {Array} event.orderPriority - New table priority.
-       */
-      this.$emit('sort', {
-        tableHeader: headers,
-        orderPriority: this.order_priority,
-      });
-    },
-    /**
-     * Get sorting icon based on sorting direction.
-     *
-     * @param {String} sortType - The sorting direction (asc or desc or null)
-     * @returns {string} - The sorting icon from fontawesome.
-     */
-    getSortingIcon (sortType) {
-      switch (sortType) {
-        case 'asc':
-          return 'sort-up';
-        case 'desc':
-          return 'sort-down';
-        default:
-          return 'sort';
       }
     },
     /**

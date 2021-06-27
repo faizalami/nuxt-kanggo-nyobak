@@ -17,10 +17,11 @@
       </div>
       <data-table
         :data="data"
-        :headers="headers"
+        :headers.sync="headers"
         :page="page"
         :total-items="total"
         @page-changed="setPage"
+        @sort="setOrder"
       >
         <template #column(actions)="{ row }">
           <t-button
@@ -66,14 +67,17 @@ export default {
         {
           value: 'name',
           text: 'Name',
+          sort: null,
         },
         {
           value: 'description',
           text: 'Description',
+          sort: null,
         },
         {
           value: 'actions',
           text: 'Actions',
+          sortable: false,
         },
       ],
       search: null,
@@ -108,6 +112,7 @@ export default {
       getAll: 'categories/getAll',
       setSearch: 'categories/setSearch',
       setPage: 'categories/setPage',
+      setOrder: 'categories/setOrder',
       deleteItem: 'categories/delete',
     }),
     openFormModal (mode, data) {

@@ -91,6 +91,7 @@ const settings = {
         'primary-small': 'text-white bg-blue-500 p-1 border border-transparent shadow-sm rounded hover:bg-blue-600',
         'error-small': 'text-white bg-red-500 p-1 border border-transparent rounded shadow-sm hover:bg-red-600',
         'secondary-small': 'text-gray-500 bg-white p-1 border border-gray-300 rounded shadow-sm',
+        'table-header': 'text-sm font-bold font-medium border border-transparent p-3 w-full',
       },
     },
   },

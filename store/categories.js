@@ -12,6 +12,7 @@ const stateData = {
   search: null,
   page: 1,
   total: 0,
+  orders: [],
 };
 
 export const mutations = {
@@ -32,6 +33,9 @@ export const mutations = {
   },
   total (state, payload) {
     state.total = payload;
+  },
+  orders: (state, payload) => {
+    state.orders = payload;
   },
 };
 
@@ -59,6 +63,7 @@ export const actions = {
    * @param {String|Number} payload - Search payload.
    */
   async setSearch ({ commit, dispatch }, payload) {
+    commit('page', 1);
     commit('search', payload);
     await dispatch('getAll');
   },
@@ -72,6 +77,19 @@ export const actions = {
    */
   async setPage ({ commit, dispatch }, payload) {
     commit('page', payload);
+    await dispatch('getAll');
+  },
+  /**
+   * Set sorting order.
+   *
+   * @param commit
+   * @param dispatch
+   * @param {[{value:String,sort:"asc"|"desc"|null}]} tableHeader - Table header.
+   * @returns {Promise<void>}
+   */
+  async setOrder ({ commit, dispatch }, tableHeader) {
+    commit('page', 1);
+    commit('orders', tableHeader);
     await dispatch('getAll');
   },
   /**
@@ -92,6 +110,20 @@ export const actions = {
           ],
         },
       };
+    }
+    if (state.orders.length) {
+      const orders = [];
+      state.orders.forEach(order => {
+        if (order.sort) {
+          orders.push(`${order.value}:${order.sort}`);
+        }
+      });
+      if (orders.length) {
+        params = {
+          ...params,
+          _sort: orders.join(','),
+        };
+      }
     }
     params = {
       ...params,
