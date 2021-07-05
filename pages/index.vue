@@ -1,6 +1,8 @@
 <template>
   <div>
-    <t-button v-if="logged_in" class="ml-auto">Add Product</t-button>
+    <t-button v-if="logged_in" class="ml-auto" @click="openFormModal('create')">
+      Add Product
+    </t-button>
     <div class="container grid grid-cols-5 gap-2">
       <t-card
         v-for="(item, index) in data"
@@ -17,11 +19,13 @@
         </template>
       </t-card>
     </div>
+    <form-modal :mode="form_mode" :selected-data="null" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import FormModal from '~/components/page/products/FormModal';
 
 /**
  * **Products page**
@@ -30,6 +34,14 @@ import { mapActions, mapGetters } from 'vuex';
  */
 export default {
   name: 'Products',
+  components: {
+    FormModal,
+  },
+  data () {
+    return {
+      form_mode: 'create',
+    };
+  },
   computed: {
     ...mapGetters({
       logged_in: 'logged_in',
@@ -47,6 +59,13 @@ export default {
       setPageTitle: 'setPageTitle',
       getAll: 'products/getAll',
     }),
+    openFormModal (mode) {
+      this.form_mode = mode;
+      // if (mode === 'edit') {
+      //   this.selected_data = data;
+      // }
+      this.$modal.show('form-product-modal');
+    },
   },
 };
 </script>

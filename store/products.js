@@ -44,6 +44,57 @@ export const actions = {
       throw error.response ? error.response : error;
     }
   },
+  /**
+   * Create new item.
+   *
+   * @param context
+   * @param {FormData} payload - Product form data.
+   * @returns {Promise<{success: boolean, error}|{data: any, success: boolean}|{success: boolean}>}
+   */
+  async create (context, payload) {
+    try {
+      const { status, data } = await this.$axios.post('/products', payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return {
+        success: status === 200,
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      };
+    }
+  },
+  /**
+   * Update an item.
+   *
+   * @param context
+   * @param {Number} id - Product ID.
+   * @param {FormData} payload - Update payload.
+   * @returns {Promise<{success: boolean, error}|{data: any, success: boolean}|{success: boolean}>}
+   */
+  async update (context, { id, payload }) {
+    try {
+      const { status, data } = await this.$axios.put(`/products/${id}`, payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return {
+        success: status === 200,
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      };
+    }
+  },
 };
 
 export const state = () => ({ ...stateData });

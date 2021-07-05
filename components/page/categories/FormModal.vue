@@ -1,5 +1,6 @@
 <template>
   <t-modal
+    focus-on-open
     :header="`${mode === 'create' ? 'Add New' : 'Edit'} Category`"
     name="form-category-modal"
     @opened="loadData"
@@ -43,7 +44,7 @@
 import { mapActions } from 'vuex';
 
 /**
- * **Categories Form Modal**
+ * **Category Form Modal**
  *
  * @author Faizal Amiruddin <f.a.faizal.amiruddin@gmail.com>
  */
@@ -79,7 +80,7 @@ export default {
       });
     },
     loadData () {
-      if (this.mode === 'edit') {
+      if (this.mode === 'edit' && this.selectedData) {
         Object.keys(this.form).forEach(key => {
           this.form[key] = this.selectedData[key];
         });

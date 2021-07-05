@@ -7,6 +7,7 @@ import qs from 'qs';
  */
 const stateData = {
   data: [],
+  options: [],
   detail: null,
   params: null,
   search: null,
@@ -18,6 +19,9 @@ const stateData = {
 export const mutations = {
   data (state, payload) {
     state.data = payload;
+  },
+  options (state, payload) {
+    state.options = payload;
   },
   detail (state, payload) {
     state.detail = payload;
@@ -42,6 +46,9 @@ export const mutations = {
 export const getters = {
   data (state) {
     return state.data;
+  },
+  options (state) {
+    return state.options;
   },
   detail (state) {
     return state.detail;
@@ -110,7 +117,11 @@ export const actions = {
           ],
         },
       };
+    } else {
+      const { _where, ...newParams } = params;
+      params = { ...newParams };
     }
+
     if (state.orders.length) {
       const orders = [];
       state.orders.forEach(order => {
@@ -123,6 +134,9 @@ export const actions = {
           ...params,
           _sort: orders.join(','),
         };
+      } else {
+        const { _sort, ...newParams } = params;
+        params = { ...newParams };
       }
     }
     params = {
@@ -147,6 +161,29 @@ export const actions = {
 
       commit('data', response);
       await dispatch('getTotal');
+    } catch (error) {
+      if (!this.$axios.isCancel(error)) {
+        throw error.response ? error.response : error;
+      }
+    }
+  },
+  /**
+   * Get all data with pagination, filter, and sorting.
+   *
+   * @param state
+   * @param commit
+   * @param dispatch
+   * @returns {Promise<void>}
+   */
+  async getAllOptions ({ state, commit, dispatch }) {
+    try {
+      const response = await this.$axios.$get('/categories', {
+        params: {
+          _limit: -1,
+        },
+      });
+
+      commit('options', response);
     } catch (error) {
       if (!this.$axios.isCancel(error)) {
         throw error.response ? error.response : error;
