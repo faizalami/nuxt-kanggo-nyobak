@@ -4,7 +4,7 @@
       <div class="flex mb-2">
         <div class="flex-auto">
           <t-button v-if="logged_in" @click="openFormModal('create')">
-            Add Product
+            Add Category
           </t-button>
         </div>
         <div class="flex-auto">

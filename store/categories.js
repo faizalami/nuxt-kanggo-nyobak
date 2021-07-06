@@ -8,7 +8,6 @@ import qs from 'qs';
 const stateData = {
   data: [],
   options: [],
-  detail: null,
   params: null,
   search: null,
   page: 1,
@@ -22,9 +21,6 @@ export const mutations = {
   },
   options (state, payload) {
     state.options = payload;
-  },
-  detail (state, payload) {
-    state.detail = payload;
   },
   params (state, payload) {
     state.params = payload;
@@ -49,9 +45,6 @@ export const getters = {
   },
   options (state) {
     return state.options;
-  },
-  detail (state) {
-    return state.detail;
   },
   page (state) {
     return state.page;

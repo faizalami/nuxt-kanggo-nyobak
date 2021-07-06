@@ -1,9 +1,21 @@
 <template>
   <div>
-    <t-button v-if="logged_in" class="ml-auto" @click="openFormModal('create')">
-      Add Product
-    </t-button>
-    <div class="container grid grid-cols-5 gap-2 items-start">
+    <div class="flex mb-2">
+      <div class="flex-auto">
+        <t-button v-if="logged_in" @click="openFormModal('create')">
+          Add Product
+        </t-button>
+      </div>
+      <div class="flex-auto">
+        <t-input
+          v-model="search"
+          classes="ml-auto w-full sm:w-auto"
+          placeholder="Search"
+        />
+      </div>
+    </div>
+
+    <div class="container grid grid-cols-5 gap-2">
       <t-card
         v-for="(item, index) in data"
         :key="index"
@@ -37,6 +49,21 @@
         </template>
       </t-card>
     </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 mt-2">
+      <div class="flex items-center">
+        Showing {{ limit_start }} to {{ limit_end }}
+        of {{ total }} items.
+      </div>
+      <div>
+        <t-pagination
+          :per-page="15"
+          :total-items="total"
+          :value="page"
+          @change="setPage"
+        />
+      </div>
+    </div>
     <form-modal :mode="form_mode" :selected-data="selected_data" />
   </div>
 </template>
@@ -59,13 +86,32 @@ export default {
     return {
       form_mode: 'create',
       selected_data: null,
+      search: null,
     };
+  },
+  watch: {
+    async search (newSearch, oldSearch) {
+      if (newSearch !== oldSearch) {
+        await this.setSearch(newSearch);
+      }
+    },
   },
   computed: {
     ...mapGetters({
       logged_in: 'logged_in',
       data: 'products/data',
+      page: 'products/page',
+      total: 'products/total',
     }),
+    // Current page data limit start from.
+    limit_start () {
+      return (this.page - 1) * 15 + 1;
+    },
+    // Current page data limit end at.
+    limit_end () {
+      const end = this.page * 15;
+      return end > this.total ? this.total : end;
+    },
   },
   created () {
     this.setPageTitle('Products');
@@ -77,6 +123,8 @@ export default {
     ...mapActions({
       setPageTitle: 'setPageTitle',
       getAll: 'products/getAll',
+      setSearch: 'products/setSearch',
+      setPage: 'products/setPage',
       deleteItem: 'products/delete',
     }),
     openFormModal (mode, data) {
