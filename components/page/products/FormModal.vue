@@ -145,7 +145,11 @@ export default {
       await this.getCategoryOptions();
       if (this.mode === 'edit' && this.selectedData) {
         Object.keys(this.form).forEach(key => {
-          this.form[key] = this.selectedData[key];
+          if (key !== 'category') {
+            this.form[key] = this.selectedData[key];
+          } else {
+            this.form.category = this.selectedData.category.id;
+          }
         });
       }
     },
@@ -162,7 +166,7 @@ export default {
     },
     closeModal () {
       this.resetForm();
-      this.$modal.hide('form-category-modal');
+      this.$modal.hide('form-product-modal');
     },
   },
 };

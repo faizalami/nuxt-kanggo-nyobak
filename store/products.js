@@ -95,6 +95,29 @@ export const actions = {
       };
     }
   },
+  /**
+   * Delete item.
+   *
+   * @param dispatch
+   * @param {Number} id - Product ID.
+   * @returns {Promise<{success: boolean, message: string}|{success: boolean, message: *}>}
+   */
+  async delete ({ dispatch }, id) {
+    try {
+      const { status, data } = await this.$axios.delete(`/products/${id}`);
+      await dispatch('getAll');
+
+      return {
+        success: status === 200,
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      };
+    }
+  },
 };
 
 export const state = () => ({ ...stateData });
