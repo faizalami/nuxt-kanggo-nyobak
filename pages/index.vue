@@ -50,20 +50,8 @@
       </t-card>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 mt-2">
-      <div class="flex items-center">
-        Showing {{ limit_start }} to {{ limit_end }}
-        of {{ total }} items.
-      </div>
-      <div>
-        <t-pagination
-          :per-page="15"
-          :total-items="total"
-          :value="page"
-          @change="setPage"
-        />
-      </div>
-    </div>
+    <pagination :page="page" :per-page="15" :total-items="total" @page-changed="setPage" />
+
     <form-modal :mode="form_mode" :selected-data="selected_data" />
   </div>
 </template>

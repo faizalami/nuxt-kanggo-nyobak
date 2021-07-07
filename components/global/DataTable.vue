@@ -74,20 +74,7 @@
         </template>
       </t-table>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 mt-2">
-      <div class="flex items-center">
-        Showing {{ limit_start }} to {{ limit_end }}
-        of {{ totalItems }} items.
-      </div>
-      <div>
-        <t-pagination
-          :per-page="10"
-          :total-items="totalItems"
-          :value="page"
-          @change="setPage"
-        />
-      </div>
-    </div>
+    <pagination :page="page" :per-page="10" :total-items="totalItems" @page-changed="setPage" />
   </div>
 </template>
 
@@ -131,7 +118,7 @@ export default {
     // Page to display.
     page: {
       type: Number,
-      default: 0,
+      default: 1,
     },
   },
   data: () => ({
@@ -141,17 +128,6 @@ export default {
      */
     order_priority: [],
   }),
-  computed: {
-    // Current page data limit start from.
-    limit_start () {
-      return (this.page - 1) * 10 + 1;
-    },
-    // Current page data limit end at.
-    limit_end () {
-      const end = this.page * 10;
-      return end > this.totalItems ? this.totalItems : end;
-    },
-  },
   methods: {
     /**
      * Set sorting direction (asc or desc) and
