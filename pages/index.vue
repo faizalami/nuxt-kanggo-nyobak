@@ -24,7 +24,7 @@
         <img
           :alt="item.picture.name"
           class="mx-auto"
-          :src="`${$config.BASE_URL}${item.picture.formats.thumbnail.url}`"
+          :src="`${$config.API_BASE_URL}${item.picture.formats.thumbnail.url}`"
         />
 
         <div v-if="logged_in" class="block text-center mt-2">
@@ -46,6 +46,7 @@
 
         <template #footer>
           <p>{{ item.description }}</p>
+          <t-tag v-if="item.category" tag-name="span" variant="badge">{{ item.category.name }}</t-tag>
         </template>
       </t-card>
     </div>

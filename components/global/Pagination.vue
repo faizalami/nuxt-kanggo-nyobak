@@ -6,7 +6,7 @@
     </div>
     <div>
       <t-pagination
-        :per-page="15"
+        :per-page="perPage"
         :total-items="totalItems"
         :value="page"
         @change="setPage"
@@ -38,11 +38,11 @@ export default {
   computed: {
     // Current page data limit start from.
     limit_start () {
-      return (this.page - 1) * 10 + 1;
+      return (this.page - 1) * this.perPage + 1;
     },
     // Current page data limit end at.
     limit_end () {
-      const end = this.page * 10;
+      const end = this.page * this.perPage;
       return end > this.totalItems ? this.totalItems : end;
     },
   },

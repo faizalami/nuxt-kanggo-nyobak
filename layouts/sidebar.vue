@@ -12,20 +12,18 @@
           <div class="sidebar-heading">MENU</div>
         </li>
         <li>
-          <t-button
-            to="/"
-            variant="sidebar"
-          >
-            <span class="mx-0 sm:mx-2">Products</span>
-          </t-button>
+          <nuxt-link to="/">
+            <t-button variant="sidebar">
+              <span class="mx-0 sm:mx-2">Products</span>
+            </t-button>
+          </nuxt-link>
         </li>
         <li>
-          <t-button
-            to="/categories"
-            variant="sidebar"
-          >
-            <span class="mx-0 sm:mx-2">Categories</span>
-          </t-button>
+          <nuxt-link to="/categories">
+            <t-button variant="sidebar">
+              <span class="mx-0 sm:mx-2">Categories</span>
+            </t-button>
+          </nuxt-link>
         </li>
       </ul>
     </nav>
